@@ -1,0 +1,252 @@
+/* Global Styles */
+:root {
+  --steam-bg: #1b2838;
+  --steam-card: #16202d;
+  --steam-hover: #1f3347;
+  --steam-text: #c6d4df;
+  --steam-price: #a4d007;
+  --steam-button: #67c1f5;
+  --steam-button-hover: #2d73ff;
+  --steam-header: #171a21;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--steam-bg);
+  color: var(--steam-text);
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+}
+
+/* Header Styles */
+header {
+  background: linear-gradient(
+    to bottom,
+    var(--steam-header) 0%,
+    var(--steam-bg) 100%
+  );
+  padding: 20px 0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+}
+
+header h1 {
+  color: var(--steam-text);
+  font-size: 24px;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+header button {
+  background: linear-gradient(to right, var(--steam-button) 0%, #4588cf 100%);
+  border: none;
+  border-radius: 2px;
+  padding: 8px 15px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+header button:hover {
+  background: linear-gradient(
+    to right,
+    var(--steam-button-hover) 0%,
+    #5198e4 100%
+  );
+}
+
+header a {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* Game Grid Layout */
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Game Card Styles */
+.game-card {
+  background: var(--steam-card);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+}
+
+.game-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  background: var(--steam-hover);
+}
+
+.game-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.2s ease;
+}
+
+.game-card:hover .game-image {
+  opacity: 0.9;
+}
+
+.game-info {
+  padding: 15px;
+}
+
+.game-title {
+  color: var(--steam-text);
+  font-size: 18px;
+  margin: 0 0 10px 0;
+  line-height: 1.4;
+  height: 2.8em;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* Add Game Button */
+.AddGame {
+  background: linear-gradient(to right, var(--steam-button) 0%, #4588cf 100%);
+  border: none;
+  border-radius: 2px;
+  color: white;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s ease;
+  width: 100%;
+  margin: 10px 0;
+  font-weight: bold;
+}
+
+.AddGame:hover {
+  background: linear-gradient(
+    to right,
+    var(--steam-button-hover) 0%,
+    #5198e4 100%
+  );
+  transform: scale(1.02);
+}
+
+/* Tags Section */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 10px 0;
+  min-height: 50px;
+}
+
+.tag {
+  background: rgba(103, 193, 245, 0.1);
+  color: #67c1f5;
+  padding: 3px 8px;
+  border-radius: 2px;
+  font-size: 12px;
+  transition: background 0.2s ease;
+}
+
+.tag:hover {
+  background: rgba(103, 193, 245, 0.2);
+}
+
+/* Price Section */
+.price-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.price {
+  color: var(--steam-price);
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Rank Style */
+.game-info > :last-child {
+  color: #67c1f5;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .game-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    padding: 10px;
+  }
+
+  header {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  header button {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .game-title {
+    font-size: 16px;
+  }
+}
+
+/* Loading State */
+.game-card.loading {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Hover Effects */
+.game-card:hover .game-info {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.3) 0%, transparent 100%);
+}
+
+.game-card:hover .AddGame {
+  box-shadow: 0 0 10px rgba(103, 193, 245, 0.5);
+}
+button {
+  background-color: #4caf50;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}

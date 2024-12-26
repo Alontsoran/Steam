@@ -1,0 +1,11 @@
+C:\Users\alont\אינטרנטיות 2\hw1\repos\Steam\obj\Release\net6.0\PubTmp\Out\Steam.exe
+C:\Users\alont\אינטרנטיות 2\hw1\repos\Steam\obj\Release\net6.0\PubTmp\Out\appsettings.Development.json
+C:\Users\alont\אינטרנטיות 2\hw1\repos\Steam\obj\Release\net6.0\PubTmp\Out\appsettings.json
+C:\Users\alont\אינטרנטיות 2\hw1\repos\Steam\obj\Release\net6.0\PubTmp\Out\Steam.dll
+C:\Users\alont\אינטרנטיות 2\hw1\repos\Steam\obj\Release\net6.0\PubTmp\Out\Steam.deps.json
+C:\Users\alont\אינטרנטיות 2\hw1\repos\Steam\obj\Release\net6.0\PubTmp\Out\Steam.runtimeconfig.json
+C:\Users\alont\אינטרנטיות 2\hw1\repos\Steam\obj\Release\net6.0\PubTmp\Out\Steam.pdb
+C:\Users\alont\אינטרנטיות 2\hw1\repos\Steam\obj\Release\net6.0\PubTmp\Out\Microsoft.OpenApi.dll
+C:\Users\alont\אינטרנטיות 2\hw1\repos\Steam\obj\Release\net6.0\PubTmp\Out\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\alont\אינטרנטיות 2\hw1\repos\Steam\obj\Release\net6.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\alont\אינטרנטיות 2\hw1\repos\Steam\obj\Release\net6.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerUI.dll

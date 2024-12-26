@@ -8,6 +8,7 @@
         string name;
         string email;
         string password;
+
         //קונסטרקטור
         public User(int id, string name, string email, string password)
         {
@@ -21,33 +22,12 @@
 
         public int Id { get => id; set => id = value; }
         public string Name { get => name; set => name = value; }
-        public string Email1 { get => email; set => email = value; }
+        public string Email { get => email; set => email = value; }
         public string Password { get => password; set => password = value; }
 
-        static public List<User> Userslist = new List<User>();
 
 
-        public bool Insert()
-        {
-            try
-            {
-                if (Userslist.Any(item => item.Id == this.Id || item.name == this.name))
-                {
-                    return false;
-                }
-                Userslist.Add(this);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-           
-        }
-        public static List<User> read()
-        {
 
-            return Userslist;
-        }
+  
     }
 }

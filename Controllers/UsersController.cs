@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Steam.DAL;
 using Steam.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -9,12 +10,7 @@ namespace Steam.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        // GET: api/<ValuesController>
-        [HttpGet]
-        public ActionResult<List<User>> Get()
-        {
-            return Ok(Steam.Models.User.read());
-        }
+      
 
         // GET api/<ValuesController>/5
         [HttpGet("{id}")]
@@ -22,49 +18,27 @@ namespace Steam.Controllers
         {
             return "value";
         }
+        [HttpPost("login")]
+        public ActionResult<User> Login([FromBody] User loginUser)
+        {
+            DBservices db = new DBservices();
+            User user = db.Login(loginUser.Email, loginUser.Password);
+
+            if (user != null)
+                return Ok(user);
+
+            return BadRequest("שם משתמש או סיסמה שגויים");
+        }
 
         // POST api/<ValuesController>
         [HttpPost]
         public ActionResult<User> Post([FromBody] User user)
         {
+            DBservices db = new DBservices();
+            int result = db.Register(user);
 
-            // בדיקת ID
-            if (user.Id <= 0)
-            {
-                return BadRequest("ID חייב להיות מספר חיובי");
-            }
-
-            // בדיקת שם
-            if (string.IsNullOrEmpty(user.Name))
-            {
-                return BadRequest("חובה להזין שם");
-            }
-
-            // בדיקת אימייל
-            if (string.IsNullOrEmpty(user.Email1))
-            {
-                return BadRequest("חובה להזין אימייל");
-            }
-            if (!user.Email1.Contains("@"))
-            {
-                return BadRequest("אימייל לא תקין");
-            }
-
-            // בדיקת סיסמה
-            if (string.IsNullOrEmpty(user.Password))
-            {
-                return BadRequest("חובה להזין סיסמה");
-            }
-            if (user.Password.Length < 6)
-            {
-                return BadRequest("סיסמה חייבת להכיל לפחות 6 תווים");
-            }
-
-            // בדיקה אם משתמש קיים
-            if (user.Insert())
-            {
+            if (result == 1)
                 return Ok(user);
-            }
             return BadRequest("משתמש כבר קיים");
         }
 
@@ -78,6 +52,16 @@ namespace Steam.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+        [HttpPost("register")]
+        public ActionResult<User> Register([FromBody] User user)
+        {
+            DBservices db = new DBservices();
+            int result = db.Register(user);
+
+            if (result == 1)
+                return Ok(user);
+            return BadRequest("משתמש כבר קיים");
         }
     }
 }

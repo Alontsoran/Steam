@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="./game.js"></script>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="./style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./ajaxCall.js"></script>
+
+    <title>Steam Game List</title>
+  </head>
+  <body>
+    <header>
+      <div class="header-container">
+        <div class="title-section">
+          <h1>My wish List -Steam</h1>
+        </div>
+        <div>
+          <button onclick="window.location.href='./index.html'">Back</button>
+        </div>
+        <div class="filters-section">
+          <div class="filter-group">
+            <label for="price-filter">Filter by price less than:</label>
+            <div class="input-wrapper">
+              <span class="currency-symbol">$</span>
+              <input
+                type="number"
+                id="price-filter"
+                min="0"
+                placeholder="Enter price"
+              />
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <label for="rank-filter">Filter by rank less than:</label>
+            <div class="input-wrapper">
+              <span class="rank-symbol">#</span>
+              <input
+                type="number"
+                id="rank-filter"
+                min="0"
+                placeholder="Enter rank"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="game-grid"></section>
+    </main>
+
+    <script>
+      let gamelist;
+
+      function FailsFromserver(err) {
+        console.error("Failed to load games:", err);
+      }
+
+      function getFromServer(gameList) {
+        gamelist = gameList;
+        render();
+      }
+
+      function render() {
+        const gameGrid = document.querySelector(".game-grid");
+        gameGrid.innerHTML = "";
+
+        if (!gamelist || gamelist.length === 0) {
+          gameGrid.innerHTML = "<p>No games in your list</p>";
+          return;
+        }
+
+        gamelist.forEach((game) => {
+          const tags = game.Tags ? game.Tags.split(",") : [];
+          const cardHTML = `
+                  <article class="game-card">
+                      <img src="${game.headerImage1}" alt="${
+            game.name1
+          }" class="game-image">
+                      <div class="game-info">
+                          <h2 class="game-title">${game.name1}</h2>
+                          <button class="RemoveGame" data-appid="${
+                            game.appId1
+                          }">Remove from List</button>
+                          <div class="tags">
+                              ${tags
+                                .map(
+                                  (tag) =>
+                                    `<span class="tag">${tag.trim()}</span>`
+                                )
+                                .join("")}
+                          </div>
+                          <div class="price-section">
+                              <div class="price">${
+                                game.price1 > 0 ? "$" + game.price1 : "Free"
+                              }</div>
+                          </div>
+                          <div>Rank : ${game.scoreRank1}</div>
+                      </div>
+                  </article>
+                `;
+          gameGrid.innerHTML += cardHTML;
+        });
+      }
+
+      $(document).ready(function () {
+        ajaxCall("GET", api, "", getFromServer, FailsFromserver);
+      });
+      $(document).on("input", "#rank-filter", function () {
+        const rank = parseFloat($(this).val());
+        if (isNaN(rank)) {
+          ajaxCall("GET", api, "", getFromServer, FailsFromserver);
+          return;
+        } else {
+          ajaxCall(
+            "GET",
+            `${api}/rank/${rank}`,
+            "",
+            getFromServer,
+            FailsFromserver
+          );
+        }
+      });
+      $(document).on("input", "#price-filter", function () {
+        const maxPrice = parseFloat($(this).val());
+        if (isNaN(maxPrice)) {
+          ajaxCall("GET", api, "", getFromServer, FailsFromserver);
+          return;
+        } else {
+          ajaxCall(
+            "GET",
+            `${api}/price/${maxPrice}`,
+            "",
+            getFromServer,
+            FailsFromserver
+          );
+        }
+      });
+      $(document).on("click", ".RemoveGame", function () {
+        const appID = $(this).data("appid");
+        const game = gamelist.find((g) => g.appId1 === appID);
+
+        if (!game) {
+          console.error("Game not found in list");
+          return;
+        }
+
+        function responsePost() {
+          ajaxCall("GET", api, "", getFromServer, FailsFromserver);
+        }
+
+        function errorPost() {
+          console.error("Failed to remove game:", game.name1);
+        }
+
+        ajaxCall("DELETE", `${api}/${appID}`, "", responsePost, errorPost);
+      });
+    </script>
+  </body>
+</html>

@@ -10,8 +10,25 @@ namespace Steam.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Game>> Get()
         {
-            return Ok(Game.read());
+            return Game.read();
+
         }
+        // Get games by price
+        [HttpGet("price/{price}")]
+        public ActionResult<IEnumerable<Game>> GetByPrice(int price)
+        {
+            return Game.GetByPrice(price);
+        }
+        // Get games by rank
+        [HttpGet("rank/{rank}")]
+        public ActionResult<IEnumerable<Game>> GetByRankScore(int rank)
+        {
+            return Game.GetByRankScore(rank);
+        }
+
+
+
+
         // זה ריק 
         [HttpGet("{id}")]
         public void GetGameById(int id)
@@ -20,14 +37,13 @@ namespace Steam.Controllers
         }
         //החזרה של הודעת קונפליקט עבור משחק שקיים כבר
         [HttpPost]
-        public ActionResult<Game> Post([FromBody] Game game)
+        public bool  Post([FromBody] Game game)
         {
             if (game.Insert() == false)
             {
-                return BadRequest("משחק כבר קיים");
+                return false;
             }
-            Game.Gamelist.Add(game);
-            return Ok(game);
+            return true;
         }
 
         [HttpPut("{id}")]
@@ -36,8 +52,9 @@ namespace Steam.Controllers
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void DeleteById(int id)
         {
+            Game.deleteGame(id);
         }
     }
 }

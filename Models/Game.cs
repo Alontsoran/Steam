@@ -77,5 +77,64 @@
            
             return Gamelist;
         }
+
+        public static List<Game> GetByPrice(int price)
+        {
+            List<Game> gamesFiltered = new List<Game>();
+            try
+            {
+                // עובר על כל המשחקים ברשימה
+                for (int i = 0; i < Gamelist.Count; i++)
+                {
+                    if (Gamelist[i].price <= price)
+                    {
+                        
+                        gamesFiltered.Add(Gamelist[i]);
+                    }
+                }
+
+                return gamesFiltered;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in GetByPrice: {ex.Message}");
+                return gamesFiltered; 
+            }
+        }
+        public static List<Game> GetByRankScore(int Rank)
+        {
+            List<Game> gamesFiltered = new List<Game>();
+            try
+            {
+                // עובר על כל המשחקים ברשימה
+                for (int i = 0; i < Gamelist.Count; i++)
+                {
+                    if (Gamelist[i].scoreRank<= Rank)
+                    {
+
+                        gamesFiltered.Add(Gamelist[i]);
+                    }
+                }
+
+                return gamesFiltered;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in GetByPrice: {ex.Message}");
+                return gamesFiltered;
+            }
+        }
+        public static void deleteGame(int id)
+        {
+            // עובר על כל המשחקים ברשימה
+            for (int i = 0; i < Gamelist.Count; i++)
+            {
+                if (Gamelist[i].appId == id)
+                {
+                    Gamelist.Remove(Gamelist[i]);
+                }
+            }
+            
+        }
     }
 }

@@ -1,0 +1,303 @@
+/* Global Styles */
+:root {
+  --steam-bg: #1b2838;
+  --steam-card: #16202d;
+  --steam-hover: #1f3347;
+  --steam-text: #c6d4df;
+  --steam-price: #a4d007;
+  --steam-button: #67c1f5;
+  --steam-button-hover: #2d73ff;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--steam-bg);
+  color: var(--steam-text);
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+}
+
+/* Header Styles */
+header {
+  background: linear-gradient(to bottom, #171a21 0%, #1b2838 100%);
+  padding: 20px 0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+h1 {
+  color: var(--steam-text);
+  font-size: 24px;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Game Grid Layout */
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Game Card Styles */
+.game-card {
+  background: var(--steam-card);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  position: relative;
+}
+
+.game-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  background: var(--steam-hover);
+}
+
+.game-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.game-info {
+  padding: 15px;
+}
+
+.game-title {
+  color: var(--steam-text);
+  font-size: 18px;
+  margin: 0 0 10px 0;
+  line-height: 1.4;
+}
+
+/* Button Styles */
+.RemoveGame {
+  background: linear-gradient(to right, var(--steam-button) 0%, #4588cf 100%);
+  border: none;
+  border-radius: 2px;
+  color: white;
+  padding: 8px 15px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s ease;
+  width: 100%;
+  margin: 10px 0;
+}
+
+.RemoveGame:hover {
+  background: linear-gradient(
+    to right,
+    var(--steam-button-hover) 0%,
+    #5198e4 100%
+  );
+}
+
+/* Tags Section */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 10px 0;
+}
+
+.tag {
+  background: rgba(103, 193, 245, 0.1);
+  color: var(--steam-text);
+  padding: 3px 8px;
+  border-radius: 2px;
+  font-size: 12px;
+}
+
+/* Price Section */
+.price-section {
+  margin-top: 10px;
+}
+
+.price {
+  color: var(--steam-price);
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .game-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    padding: 10px;
+  }
+
+  .game-title {
+    font-size: 16px;
+  }
+
+  header {
+    padding: 15px 0;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+}
+
+/* Empty State */
+.game-grid p {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+  color: var(--steam-text);
+}
+
+/* Loading Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.game-card.loading {
+  background: linear-gradient(
+    to right,
+    var(--steam-card) 4%,
+    var(--steam-hover) 25%,
+    var(--steam-card) 36%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+/* Header Styling */
+header {
+  background: linear-gradient(to bottom, #171a21 0%, #1b2838 100%);
+  padding: 20px 0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.title-section {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.title-section h1 {
+  color: #c6d4df;
+  font-size: 28px;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.filters-section {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filter-group label {
+  color: #c6d4df;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.currency-symbol,
+.rank-symbol {
+  position: absolute;
+  left: 10px;
+  color: #67c1f5;
+  font-weight: bold;
+}
+
+.filter-group input {
+  background: #316282;
+  border: 1px solid #67c1f5;
+  border-radius: 3px;
+  color: white;
+  padding: 8px;
+  padding-left: 25px;
+  width: 120px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.filter-group input:focus {
+  outline: none;
+  border-color: #67c1f5;
+  box-shadow: 0 0 5px rgba(103, 193, 245, 0.5);
+  background: #3d7599;
+}
+
+.filter-group input::placeholder {
+  color: #88b1c8;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .filters-section {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .filter-group {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .filter-group input {
+    width: 100%;
+  }
+}
+
+/* Remove arrow buttons from number input */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+button {
+  background-color: #16d6c6;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}

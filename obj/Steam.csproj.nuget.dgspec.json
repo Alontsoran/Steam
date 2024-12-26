@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\alont\\source\\repos\\Steam\\Steam.csproj": {}
+    "C:\\Users\\alont\\אינטרנטיות 2\\hw1\\repos\\Steam\\Steam.csproj": {}
   },
   "projects": {
-    "C:\\Users\\alont\\source\\repos\\Steam\\Steam.csproj": {
+    "C:\\Users\\alont\\אינטרנטיות 2\\hw1\\repos\\Steam\\Steam.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\alont\\source\\repos\\Steam\\Steam.csproj",
+        "projectUniqueName": "C:\\Users\\alont\\אינטרנטיות 2\\hw1\\repos\\Steam\\Steam.csproj",
         "projectName": "Steam",
-        "projectPath": "C:\\Users\\alont\\source\\repos\\Steam\\Steam.csproj",
+        "projectPath": "C:\\Users\\alont\\אינטרנטיות 2\\hw1\\repos\\Steam\\Steam.csproj",
         "packagesPath": "C:\\Users\\alont\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\alont\\source\\repos\\Steam\\obj\\",
+        "outputPath": "C:\\Users\\alont\\אינטרנטיות 2\\hw1\\repos\\Steam\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -48,6 +48,10 @@
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.2.3, )"
+            },
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.9.0, )"
             }
           },
           "imports": [

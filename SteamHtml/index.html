@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="./game.js"></script>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="./stylehome.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./ajaxCall.js"></script>
+
+    <title>Steam Game List</title>
+  </head>
+  <body>
+    <header>
+      <div class="container"><h1>Game List Steam</h1></div>
+      <button onclick="window.location.href='./mygames.html'">Wish List</button>
+    </header>
+
+    <main>
+      <section class="game-grid">
+        <!-- כרטיסיות משחק ירונדרו כאן -->
+      </section>
+    </main>
+  </body>
+
+  <script>
+    $(document).ready(function () {
+      // Render game cards
+      function renderGameCards(games) {
+        const gameGrid = document.querySelector(".game-grid");
+        gameGrid.innerHTML = "";
+
+        games.forEach((game) => {
+          const tags = game.Tags ? game.Tags.split(",") : [];
+          const cardHTML = `
+           <article class="game-card">
+             <img src="${game.Header_image}" alt="${
+            game.Name
+          }" class="game-image">
+             <div class="game-info">
+               <h2 class="game-title">${game.Name}</h2>
+               <button class="AddGame" data-appid="${
+                 game.AppID
+               }">Add to List</button>
+               <div class="tags">
+                 ${tags
+                   .map((tag) => `<span class="tag">${tag}</span>`)
+                   .join("")}
+               </div>
+               <div class="price-section">
+                 <div class="price">$${game.Price}</div>
+               </div>
+               Rank : ${game.Score_rank}
+             </div>
+           </article>
+         `;
+          gameGrid.innerHTML += cardHTML;
+        });
+      }
+
+      // כל המשחקים
+      renderGameCards(GAME);
+
+      // לחיצה על משחק (כפתור שיוסיף אותו לרשימה)
+      $(document).on("click", ".AddGame", function () {
+        const appID = $(this).data("appid");
+        const game = GAME.find((g) => g.AppID === appID);
+
+        if (!game) {
+          alert("Game not found!");
+          return;
+        }
+
+        const gameData = {
+          appId1: game.AppID,
+          name1: game.Name,
+          releasedate1: new Date(game.Release_date).toISOString(),
+          price1: parseFloat(game.Price),
+          description: game.description,
+          headerImage1: game.Header_image,
+          website1: game.Website,
+          windows1: game.Windows === "TRUE",
+          mac1: game.Mac === "TRUE",
+          linux1: game.Linux === "TRUE",
+          scoreRank1: parseInt(game.Score_rank),
+          recommendations: game.Recommendations,
+          publisher1: game.Developers,
+        };
+
+        function responsePost() {
+          alert(`Game ${game.Name} added successfully!`);
+        }
+
+        function errorPost(jqXHR, textStatus, errorThrown) {
+          console.error("Error:", textStatus, errorThrown);
+          alert(`Failed to add game ${game.Name}`);
+        }
+
+        ajaxCall(
+          "POST",
+          api,
+          JSON.stringify(gameData),
+          responsePost,
+          errorPost
+        );
+      });
+    });
+  </script>
+</html>
