@@ -292,12 +292,10 @@ namespace Steam.DAL
             if (user == null)
                 throw new ArgumentNullException(nameof(user));
 
-            // מוודאים שהמשתמש מכיל Id תקין
-            // בהנחה ש-id הוא string או int. אם זה int, אפשר לבדוק אם == 0 במקום string.IsNullOrEmpty
+        
             if (string.IsNullOrEmpty(user.Id.ToString()))
                 throw new ArgumentNullException("Id");
 
-            // מילון פרמטרים ל-SP
             var paramDic = new Dictionary<string, object>
     {
         { "@Id", user.Id },                          // מזהה המשתמש
