@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Steam.DAL;
 using Steam.Models;
 
 namespace Steam.Controllers
@@ -7,54 +8,83 @@ namespace Steam.Controllers
     [ApiController]
     public class GameController : ControllerBase
     {    // קריאה של כל המשחקים ואז הצגהתם
-        [HttpGet]
-        public ActionResult<IEnumerable<Game>> Get()
+        [HttpPost("user/{userId}/game/{gameId}")]
+        public ActionResult AddGame(string userId, string gameId)
         {
-            return Game.read();
+            DBservices db = new DBservices();
+            int result = db.AddGame(userId, gameId);
 
-        }
-        // Get games by price
-        [HttpGet("price/{price}")]
-        public ActionResult<IEnumerable<Game>> GetByPrice(int price)
-        {
-            return Game.GetByPrice(price);
-        }
-        // Get games by rank
-        [HttpGet("rank/{rank}")]
-        public ActionResult<IEnumerable<Game>> GetByRankScore(int rank)
-        {
-            return Game.GetByRankScore(rank);
+            if (result == 1)
+                return Ok();
+
+            return BadRequest("Game already exists for user");
         }
 
-
-
-
-        // זה ריק 
-        [HttpGet("{id}")]
-        public void GetGameById(int id)
+        // קבלת המשחקים של משתמש ספציפי
+        [HttpGet("user/{userId}/games")]
+        public ActionResult<List<Game>> GetUserGames(string userId)  // קבלת userId כפרמטר מה-route
         {
-          
-        }
-        //החזרה של הודעת קונפליקט עבור משחק שקיים כבר
-        [HttpPost]
-        public bool  Post([FromBody] Game game)
-        {
-            if (game.Insert() == false)
+            try
             {
-                return false;
+                DBservices db = new DBservices();
+                return db.ShowUserGames(userId);
             }
-            return true;
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("user/{userId}/games/{Price}")]
+        public ActionResult<List<Game>> GetUserPriceGames(float Price,string userId)  // קבלת userId כפרמטר מה-route
+        {
+            try
+            {
+                DBservices db = new DBservices();
+                return db.ShowUserWithPriceGames(userId, Price);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("user/{userId}/games/Rank/{Rank}")]
+        public ActionResult<List<Game>> GetUserRankGames(float Rank, string userId)  // קבלת userId כפרמטר מה-route
+        {
+            try
+            {
+                DBservices db = new DBservices();
+                return db.showGamesWIthRank(userId, Rank);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        // קבלת כל המשחקים
+        // קבלת כל המשחקים
+        [HttpGet]
+        public ActionResult<List<Game>> GetAllGames()
+        {
+            DBservices db = new DBservices();
+            List<Game> games = db.GetAllGames();
+            if (games != null && games.Any())
+                return Ok(games);
+            return NotFound("No games found");
+        }
+        // קריאה של כל המשחקים ואז הצגהתם
+        [HttpDelete("user/{userId}/game/{gameId}")]
+        public ActionResult DeleteGame(string userId, string gameId)
+        {
+            DBservices db = new DBservices();
+            int result = db.DeleteGame(userId, gameId);
+
+            if (result == 1)
+                return Ok();
+
+            return BadRequest("Game already exists for user");
         }
 
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        [HttpDelete("{id}")]
-        public void DeleteById(int id)
-        {
-            Game.deleteGame(id);
-        }
     }
+
+
 }
