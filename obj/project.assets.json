@@ -391,11 +391,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\alont\\אינטרנטיות 2\\hw1\\repos\\Steam\\Steam.csproj",
+      "projectUniqueName": "C:\\Users\\alont\\OneDrive\\OneDrive 1\\Documents\\GitHub\\Steam\\Steam.csproj",
       "projectName": "Steam",
-      "projectPath": "C:\\Users\\alont\\אינטרנטיות 2\\hw1\\repos\\Steam\\Steam.csproj",
+      "projectPath": "C:\\Users\\alont\\OneDrive\\OneDrive 1\\Documents\\GitHub\\Steam\\Steam.csproj",
       "packagesPath": "C:\\Users\\alont\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\alont\\אינטרנטיות 2\\hw1\\repos\\Steam\\obj\\",
+      "outputPath": "C:\\Users\\alont\\OneDrive\\OneDrive 1\\Documents\\GitHub\\Steam\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -410,7 +410,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\sdk\\8.0.100-preview.4.23260.5\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -423,7 +423,13 @@
         "warnAsError": [
           "NU1605"
         ]
-      }
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "9.0.100"
     },
     "frameworks": {
       "net6.0": {
@@ -457,7 +463,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100-preview.4.23260.5\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102\\RuntimeIdentifierGraph.json"
       }
     }
   }

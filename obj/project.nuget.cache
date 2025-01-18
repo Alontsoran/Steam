@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "iSMbSdcGGR6I2RFp2jGey/Suovzt/DiqVAiDyFGzVYUwQ36W6rP1s22oS24w4uhZNuWCmS/6eDII8O0ucwXWZA==",
+  "dgSpecHash": "LOa75RibUVI=",
   "success": true,
-  "projectFilePath": "C:\\Users\\alont\\אינטרנטיות 2\\hw1\\repos\\Steam\\Steam.csproj",
+  "projectFilePath": "C:\\Users\\alont\\OneDrive\\OneDrive 1\\Documents\\GitHub\\Steam\\Steam.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\alont\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
     "C:\\Users\\alont\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
