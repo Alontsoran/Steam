@@ -9,25 +9,26 @@ namespace Steam.Models
         private string name;
         private string email;
         private string password;
+        private bool isActive;
+        private Double Number;
 
-        // Constructor
-        public User(string id, string name, string email, string password)
+        public User(string id, string name, string email, string password, bool isActive = true, Double number = 0)
         {
-            this.id = id;
-            this.name = name;
-            this.email = email;
-            this.password = password;
+            Id = id;
+            Name = name;
+            Email = email;
+            Password = password;
+            IsActive = isActive;
+            Number1 = number;
         }
-
-        // Empty constructor
+       
         public User() { }
 
-        // Properties
         public string Id { get => id; set => id = value; }
         public string Name { get => name; set => name = value; }
         public string Email { get => email; set => email = value; }
         public string Password { get => password; set => password = value; }
-
-      
+        public bool IsActive { get => isActive; set => isActive = value; }
+        public Double Number1 { get => Number; set => Number = value; }
     }
 }

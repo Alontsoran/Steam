@@ -1,7 +1,9 @@
-﻿using Steam.Models;
+﻿using Microsoft.Extensions.Logging;
+using Steam.Models;
 using System.Data;
 using System.Data.SqlClient;
 using System.Xml.Linq;
+using Steam.Models;  // הוסף את זה בראש הקובץ
 
 namespace Steam.DAL
 {
@@ -178,7 +180,9 @@ namespace Steam.DAL
                         linux1: Convert.ToBoolean(reader["Linux"]),
                         scoreRank1: Convert.ToInt32(reader["Score_rank"]),
                         recommendations: reader["Recommendations"].ToString(),
-                        publisher1: reader["Developers"].ToString()
+                        publisher1: reader["Developers"].ToString(),
+                                                numberOfPurchases: Convert.ToInt32(reader["numberOfPurchases"])
+
                     );
                     games.Add(game);
                 }
@@ -213,7 +217,9 @@ namespace Steam.DAL
                         linux1: Convert.ToBoolean(reader["Linux"]),
                         scoreRank1: Convert.ToInt32(reader["Score_rank"]),
                         recommendations: reader["Recommendations"].ToString(),
-                        publisher1: reader["Developers"].ToString()
+                        publisher1: reader["Developers"].ToString(),
+                                                numberOfPurchases: Convert.ToInt32(reader["numberOfPurchases"])
+
                     );
                     games.Add(game);
                 }
@@ -249,7 +255,8 @@ namespace Steam.DAL
                         linux1: Convert.ToBoolean(reader["Linux"]),
                         scoreRank1: Convert.ToInt32(reader["Score_rank"]),
                         recommendations: reader["Recommendations"].ToString(),
-                        publisher1: reader["Developers"].ToString()
+                        publisher1: reader["Developers"].ToString(),
+                        numberOfPurchases: Convert.ToInt32(reader["numberOfPurchases"])
                     );
                     games.Add(game);
                 }
@@ -262,30 +269,41 @@ namespace Steam.DAL
             Dictionary<string, object> paramDic = new Dictionary<string, object>();
 
             using (SqlConnection con = connect("myProjDB"))
-            using (SqlCommand cmd = CreateCommandWithStoredProcedureGeneral("ListGames", con, paramDic))
-            using (SqlDataReader reader = cmd.ExecuteReader())
+            using (SqlCommand cmd = CreateCommandWithStoredProcedureGeneral("SP_GetAllGames", con, paramDic))
             {
-                while (reader.Read())
+                try
                 {
-                    games.Add(new Game(appId1: Convert.ToInt32(reader["AppID"]),
-                        name1: reader["Name"].ToString(),
-                        releaseDate1: DateTime.Parse(reader["Release_date"].ToString()),
-                        price1: Convert.ToDecimal(reader["Price"]),
-                        description: reader["description"].ToString(),
-                        headerImage1: reader["Header_image"].ToString(),
-                        website1: reader["Website"].ToString(),
-                        windows1: Convert.ToBoolean(reader["Windows"]),
-                        mac1: Convert.ToBoolean(reader["Mac"]),
-                        linux1: Convert.ToBoolean(reader["Linux"]),
-                        scoreRank1: Convert.ToInt32(reader["Score_rank"]),
-                        recommendations: reader["Recommendations"].ToString(),
-                        publisher1: reader["Developers"].ToString())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        
-                    });
+                        while (reader.Read())
+                        {
+                            games.Add(new Game(
+                                appId1: Convert.ToInt32(reader["AppID"]),
+                                name1: reader["Name"].ToString(),
+                                releaseDate1: DateTime.Parse(reader["Release_date"].ToString()),
+                                price1: Convert.ToDecimal(reader["Price"]),
+                                description: reader["description"].ToString(),
+                                headerImage1: reader["Header_image"].ToString(),
+                                website1: reader["Website"].ToString(),
+                                windows1: Convert.ToBoolean(reader["Windows"]),
+                                mac1: Convert.ToBoolean(reader["Mac"]),
+                                linux1: Convert.ToBoolean(reader["Linux"]),
+                                scoreRank1: Convert.ToInt32(reader["Score_rank"]),
+                                recommendations: reader["Recommendations"].ToString(),
+                                publisher1: reader["Developers"].ToString(),
+                                                        numberOfPurchases: Convert.ToInt32(reader["numberOfPurchases"])
+
+                            ));
+                        }
+                    }
+                    return games;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error in GetAllGames: {ex.Message}");
+                    throw;
                 }
             }
-            return games;
         }
         public int UpdateUser(User user, string newPassword)
         {
@@ -355,6 +373,268 @@ namespace Steam.DAL
             }
         }
 
+        public User GetUserData(string userId)
+        {
+            Dictionary<string, object> paramDic = new Dictionary<string, object>
+    {
+        { "@UserId", Guid.Parse(userId) }  // Converting string to GUID
+    };
+
+            using (SqlConnection con = connect("myProjDB"))
+            {
+                using (SqlCommand cmd = CreateCommandWithStoredProcedureGeneral("SP_GetUserData", con, paramDic))
+                {
+                    try
+                    {
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                return new User(
+                                    id: reader["UserId"].ToString(),
+                                    name: reader["Name"].ToString(),
+                                    email: reader["Email"].ToString(),
+                                    password: reader["Password"].ToString(),
+                                    isActive: reader["IsActive"] != DBNull.Value ? Convert.ToBoolean(reader["IsActive"]) : false
+                                );
+                            }
+                            return null;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error in GetUserData: {ex.Message}");
+                        throw;
+                    }
+                }
+            }
+        }
+        public List<User> GetFilteredUsers(bool? isActive = null, string searchTerm = "")
+        {
+            List<User> users = new List<User>();
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+
+            if (isActive.HasValue)
+            {
+                paramDic.Add("@IsActive", isActive.Value);
+            }
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                paramDic.Add("@SearchTerm", searchTerm);
+            }
+
+            using (SqlConnection con = connect("myProjDB"))
+            using (SqlCommand cmd = CreateCommandWithStoredProcedureGeneral("SP_GetFilteredUsers", con, paramDic))
+            {
+                try
+                {
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            users.Add(new User(
+                                id: reader["UserId"].ToString(),
+                                name: reader["Name"].ToString(),
+                                email: reader["Email"].ToString(),
+                                password: reader["Password"].ToString(),
+                                isActive: reader["IsActive"] != DBNull.Value ? Convert.ToBoolean(reader["IsActive"]) : false
+                            ));
+                        }
+                    }
+                    return users;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error in GetFilteredUsers: {ex.Message}");
+                    throw;
+                }
+            }
+        }
+        public List<Game> GetFilteredGames(decimal? maxPrice, int? minScore, string platform, string searchTerm)
+        {
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+
+            if (maxPrice.HasValue)
+                paramDic.Add("@MaxPrice", maxPrice.Value);
+            if (minScore.HasValue)
+                paramDic.Add("@MinScore", minScore.Value);
+            if (!string.IsNullOrEmpty(platform))
+                paramDic.Add("@Platform", platform);
+            if (!string.IsNullOrEmpty(searchTerm))
+                paramDic.Add("@SearchTerm", searchTerm);
+
+            using (SqlConnection con = connect("myProjDB"))
+            using (SqlCommand cmd = CreateCommandWithStoredProcedureGeneral("SP_GetFilteredGames", con, paramDic))
+            {
+                List<Game> games = new List<Game>();
+
+                try
+                {
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            games.Add(new Game(
+                                appId1: Convert.ToInt32(reader["AppID"]),
+                                name1: reader["Name"].ToString(),
+                                releaseDate1: DateTime.Parse(reader["Release_date"].ToString()),
+                                price1: Convert.ToDecimal(reader["Price"]),
+                                description: reader["description"].ToString(),
+                                headerImage1: reader["Header_image"].ToString(),
+                                website1: reader["Website"].ToString(),
+                                windows1: Convert.ToBoolean(reader["Windows"]),
+                                mac1: Convert.ToBoolean(reader["Mac"]),
+                                linux1: Convert.ToBoolean(reader["Linux"]),
+                                scoreRank1: Convert.ToInt32(reader["Score_rank"]),
+                                recommendations: reader["Recommendations"].ToString(),
+                                publisher1: reader["Developers"].ToString(),
+                                                        numberOfPurchases: Convert.ToInt32(reader["numberOfPurchases"])
+
+                            ));
+                        }
+                    }
+                    return games;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error in GetFilteredGames: {ex.Message}");
+                    throw;
+                }
+            }
+        }
+
+
+        // Get all users
+        public List<User> GetAllUsers()
+        {
+            List<User> users = new List<User>();
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+
+            using (SqlConnection con = connect("myProjDB"))
+            using (SqlCommand cmd = CreateCommandWithStoredProcedureGeneral("SP_GetAllUsers", con, paramDic))
+            {
+                try
+                {
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            users.Add(new User(
+                                id: reader["UserId"].ToString(),
+                                name: reader["Name"].ToString(),
+                                email: reader["Email"].ToString(),
+                                password: reader["Password"].ToString(),
+                                isActive: reader["IsActive"] != DBNull.Value ? Convert.ToBoolean(reader["IsActive"]) : false,
+                                number: Convert.ToDouble(reader["NumOfp"])
+
+                            ));
+                        }
+                    }
+                    return users;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error in GetAllUsers: {ex.Message}");
+                    throw;
+                }
+            }
+        }
+
+        // Get active users only
+        public List<User> GetActiveUsers()
+    {
+        List<User> users = new List<User>();
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+
+        using (SqlConnection con = connect("myProjDB"))
+        using (SqlCommand cmd = CreateCommandWithStoredProcedureGeneral("SP_GetActiveUsers", con, paramDic))
+        {
+            try
+            {
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        users.Add(new User(
+                            id: reader["UserId"].ToString(),
+                            name: reader["Name"].ToString(),
+                            email: reader["Email"].ToString(),
+                            password: reader["Password"].ToString(),
+                            isActive: true
+                        ));
+                    }
+                }
+                return users;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in GetActiveUsers: {ex.Message}");
+                throw;
+            }
+        }
     }
+
+    // Get user by email
+    public User GetUserByEmail(string email)
+    {
+        Dictionary<string, object> paramDic = new Dictionary<string, object>
+        {
+            { "@Email", email }
+        };
+
+        using (SqlConnection con = connect("myProjDB"))
+        using (SqlCommand cmd = CreateCommandWithStoredProcedureGeneral("SP_GetUserByEmail", con, paramDic))
+        {
+            try
+            {
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new User(
+                            id: reader["UserId"].ToString(),
+                            name: reader["Name"].ToString(),
+                            email: reader["Email"].ToString(),
+                            password: reader["Password"].ToString(),
+                            isActive: reader["IsActive"] != DBNull.Value ? Convert.ToBoolean(reader["IsActive"]) : false
+                        );
+                    }
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in GetUserByEmail: {ex.Message}");
+                throw;
+            }
+        }
+
+    }
+        public bool UpdateUserStatus(string email, bool isActive)
+        {
+            Dictionary<string, object> paramDic = new Dictionary<string, object>
+    {
+        { "@Email", email },
+        { "@IsActive", isActive ? 1 : 0 }
+    };
+
+            using (SqlConnection con = connect("myProjDB"))
+            using (SqlCommand cmd = CreateCommandWithStoredProcedureGeneral("SP_UpdateUserStatus", con, paramDic))
+            {
+                try
+                {
+                    int result = (int)cmd.ExecuteScalar();
+                    return result == 1;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error updating user status: {ex.Message}");
+                    return false;
+                }
+            }
+        }
+
+    }
+
 
 }

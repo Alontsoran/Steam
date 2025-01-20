@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 using Steam.DAL;
 using Steam.Models;
 
@@ -42,7 +43,24 @@ namespace Steam.Controllers
             return BadRequest("משתמש כבר קיים");
         }
 
-       
+
+
+        [HttpPost("update-status")]
+        public IActionResult UpdateUserStatus([FromBody] UpdateStatusRequest req)
+        {
+            try
+            {
+                var db = new DBservices();
+                bool isUpdated = db.UpdateUserStatus(req.Email, req.IsActive);
+                return isUpdated ? Ok() : NotFound();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+
 
         // DELETE api/<ValuesController>/5
         [HttpDelete("{id}")]
@@ -85,9 +103,91 @@ namespace Steam.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+        [HttpGet("table")]
+        public ActionResult<IEnumerable<object>> GetUsersForTable()
+        {
+            try
+            {
+                DBservices db = new DBservices();
+                var users = db.GetAllUsers();  // This method exists in your DBservices
 
+                var tableData = users.Select(user => new
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    Name = user.Name,
+                    Status = user.IsActive ? "פעיל" : "לא פעיל",
+                    Number = user.Number1, // For action buttons
+                    
+                    
+                });
 
+                if (!tableData.Any())
+                    return NotFound("לא נמצאו משתמשים");
 
+                return Ok(tableData);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"שגיאה בשליפת נתוני משתמשים: {ex.Message}");
+            }
+        }
+        [HttpGet("table/filter")]
+        public ActionResult<IEnumerable<object>> GetFilteredUsersForTable(
+       [FromQuery] bool? isActive = null,
+       [FromQuery] string searchTerm = "")
+        {
+            try
+            {
+                DBservices db = new DBservices();
+                var users = db.GetFilteredUsers(isActive, searchTerm);  // This method exists in your DBservices
+
+                var tableData = users.Select(user => new
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    Name = user.Name,
+                    Status = user.IsActive ? "פעיל" : "לא פעיל",
+                    Actions = user.Id
+                });
+
+                if (!tableData.Any())
+                    return NotFound("לא נמצאו משתמשים מתאימים");
+
+                return Ok(tableData);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"שגיאה בסינון משתמשים: {ex.Message}");
+            }
+        }
+        [HttpGet("table/active")]
+        public ActionResult<IEnumerable<object>> GetActiveUsersForTable()
+        {
+            try
+            {
+                DBservices db = new DBservices();
+                var users = db.GetActiveUsers();  // This method exists in your DBservices
+
+                var tableData = users.Select(user => new
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    Name = user.Name,
+                    Status = "פעיל",
+                    Actions = user.Id
+                });
+
+                if (!tableData.Any())
+                    return NotFound("לא נמצאו משתמשים פעילים");
+
+                return Ok(tableData);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"שגיאה בשליפת משתמשים פעילים: {ex.Message}");
+            }
+        }
         [HttpGet("id")]
        public ActionResult GetUserId(string email)
         {

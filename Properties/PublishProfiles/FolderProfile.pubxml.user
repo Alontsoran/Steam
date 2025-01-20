@@ -4,8 +4,8 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 -->
 <Project>
   <PropertyGroup>
-    <_PublishTargetUrl>C:\Users\alont\אינטרנטיות 2\hw1\repos\Steam\bin\Release\net6.0\publish\</_PublishTargetUrl>
-    <History>True|2025-01-01T21:05:48.0787183Z;True|2025-01-01T22:48:25.5280806+02:00;True|2024-12-06T17:59:04.4171682+02:00;True|2024-12-06T16:46:45.7524939+02:00;True|2024-12-06T13:10:05.8823030+02:00;True|2024-12-06T12:34:55.5317885+02:00;True|2024-11-29T16:38:58.6423389+02:00;True|2024-11-29T16:38:41.9759899+02:00;True|2024-11-29T16:27:15.1059011+02:00;True|2024-11-16T11:10:06.9466316+02:00;True|2024-11-16T09:25:29.5985794+02:00;</History>
+    <_PublishTargetUrl>C:\Users\alont\OneDrive\OneDrive 1\Documents\GitHub\Steam\bin\Release\net6.0\publish\</_PublishTargetUrl>
+    <History>True|2025-01-20T19:51:39.0948382Z||;True|2025-01-20T21:48:07.0943439+02:00||;True|2025-01-01T23:05:48.0787183+02:00||;True|2025-01-01T22:48:25.5280806+02:00||;True|2024-12-06T17:59:04.4171682+02:00||;True|2024-12-06T16:46:45.7524939+02:00||;True|2024-12-06T13:10:05.8823030+02:00||;True|2024-12-06T12:34:55.5317885+02:00||;True|2024-11-29T16:38:58.6423389+02:00||;True|2024-11-29T16:38:41.9759899+02:00||;True|2024-11-29T16:27:15.1059011+02:00||;True|2024-11-16T11:10:06.9466316+02:00||;True|2024-11-16T09:25:29.5985794+02:00||;</History>
     <LastFailureDetails />
   </PropertyGroup>
 </Project>

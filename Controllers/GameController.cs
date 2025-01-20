@@ -83,8 +83,108 @@ namespace Steam.Controllers
 
             return BadRequest("Game already exists for user");
         }
+        // Get games for table display
+        [HttpGet("table")]
+        public ActionResult<IEnumerable<object>> GetGamesForTable()
+        {
+            try
+            {
+                DBservices db = new DBservices();
+                List<Game> games = db.GetAllGames();
 
+                var tableData = games.Select(game => new
+                {
+                    AppId = game.AppId1,
+                    GameName = game.Name1,
+                    ReleaseDate = game.Releasedate1.ToShortDateString(),
+                    Price = $"${game.Price1:N2}",
+                    Score = game.ScoreRank1,
+                    Platforms = GetPlatformString(game),
+                    Publisher = game.Publisher1,
+                    Actions = game.NumberOfPurchases,
+                    TOTAL=game.NumberOfPurchases*game.Price1// לשימוש בכפתורי פעולות
+                });
+
+                return Ok(tableData);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"שגיאה בטעינת נתוני משחקים: {ex.Message}");
+            }
+        }
+
+        // Get user games for table
+        [HttpGet("table/user/{userId}")]
+        public ActionResult<IEnumerable<object>> GetUserGamesForTable(string userId)
+        {
+            try
+            {
+                DBservices db = new DBservices();
+                List<Game> games = db.ShowUserGames(userId);
+
+                var tableData = games.Select(game => new
+                {
+                    AppId = game.AppId1,
+                    GameName = game.Name1,
+                    ReleaseDate = game.Releasedate1.ToShortDateString(),
+                    Price = $"${game.Price1:N2}",
+                    Score = game.ScoreRank1,
+                    Platforms = GetPlatformString(game),
+                    Publisher = game.Publisher1,
+                    Actions = game.NumberOfPurchases
+                });
+
+                return Ok(tableData);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"שגיאה בטעינת משחקי המשתמש: {ex.Message}");
+            }
+        }
+
+        // Get filtered games for table
+        [HttpGet("table/filter")]
+        public ActionResult<IEnumerable<object>> GetFilteredGamesForTable(
+            [FromQuery] decimal? maxPrice = null,
+            [FromQuery] int? minScore = null,
+            [FromQuery] string platform = null,
+            [FromQuery] string searchTerm = "")
+        {
+            try
+            {
+                DBservices db = new DBservices();
+                List<Game> games = db.GetFilteredGames(maxPrice, minScore, platform, searchTerm);
+
+                var tableData = games.Select(game => new
+                {
+                    AppId = game.AppId1,
+                    GameName = game.Name1,
+                    ReleaseDate = game.Releasedate1.ToShortDateString(),
+                    Price = $"${game.Price1:N2}",
+                    Score = game.ScoreRank1,
+                    Platforms = GetPlatformString(game),
+                    Publisher = game.Publisher1,
+                    Actions = game.NumberOfPurchases
+                });
+
+                return Ok(tableData);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"שגיאה בסינון משחקים: {ex.Message}");
+            }
+        }
+
+        private string GetPlatformString(Game game)
+        {
+            List<string> platforms = new List<string>();
+            if (game.Windows1) platforms.Add("Windows");
+            if (game.Mac1) platforms.Add("Mac");
+            if (game.Linux1) platforms.Add("Linux");
+            return string.Join(", ", platforms);
+        }
     }
+
 
 
 }

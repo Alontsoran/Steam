@@ -16,6 +16,8 @@
         private int scoreRank;
         private string recommendations;
         private string publisher;
+          private decimal revenue;
+        private int numberOfPurchases;
 
         static public List<Game> Gamelist = new List<Game>();
 
@@ -23,7 +25,7 @@
         public Game(int appId1, string name1, DateTime releaseDate1, decimal price1,
             string description, string headerImage1, string website1,
             bool windows1, bool mac1, bool linux1,
-            int scoreRank1, string recommendations, string publisher1)
+            int scoreRank1, string recommendations, string publisher1,int numberOfPurchases)
         {
             appId = appId1;
             name = name1;
@@ -38,6 +40,9 @@
             scoreRank = scoreRank1;
             this.recommendations = recommendations;
             publisher = publisher1;
+            this.NumberOfPurchases = numberOfPurchases;
+
+
         }
 
         // Properties - השארתי את אותם שמות כפי שהיו
@@ -54,6 +59,6 @@
         public int ScoreRank1 { get => scoreRank; set => scoreRank = value; }
         public string Recommendations { get => recommendations; set => recommendations = value; }
         public string Publisher1 { get => publisher; set => publisher = value; }
-
+        public int NumberOfPurchases { get => numberOfPurchases; set => numberOfPurchases = value; }
     }
 }
